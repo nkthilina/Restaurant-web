@@ -7,21 +7,45 @@ function CreateRestaurant() {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [contact, setContact] = useState("");
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const validate = () => {
+    const newErrors = {};
+
+    if (!name) {
+      newErrors.name = "Name is required.";
+    }
+    if (!address) {
+      newErrors.address = "Address is required.";
+    }
+    const contactPattern = /^[0-9]{10}$/;
+    if (!contact) {
+      newErrors.contact = "Contact is required.";
+    } else if (!contactPattern.test(contact)) {
+      newErrors.contact = "Contact number must contain 10 digits.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:3000/restaurants", {
-        name,
-        address,
-        contact,
-      })
-      .then((res) => {
-        console.log(res);
-        alert("Created Successfully.");
-        navigate("/");
-      })
-      .catch((err) => console.log(err));
+    if (validate(e)) {
+      axios
+        .post("http://localhost:3000/restaurants", {
+          name,
+          address,
+          contact,
+        })
+        .then((res) => {
+          console.log(res);
+          alert("Created Successfully.");
+          navigate("/");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   return (
@@ -79,6 +103,9 @@ function CreateRestaurant() {
                         className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset  placeholder:text-gray-400  focus:ring-inset focus:ring-blue-400 sm:text-sm sm:leading-6"
                         onChange={(e) => setName(e.target.value)}
                       />
+                      {errors.name && (
+                        <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                      )}
                     </div>
                   </div>
                   <div>
@@ -98,6 +125,9 @@ function CreateRestaurant() {
                         className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset  placeholder:text-gray-400  focus:ring-inset focus:ring-blue-400 sm:text-sm sm:leading-6"
                         onChange={(e) => setContact(e.target.value)}
                       />
+                      {errors.contact && (
+                        <p className="text-red-500 text-xs mt-1">{errors.contact}</p>
+                      )}
                     </div>
                   </div>
                   {/* <div className="sm:col-span-2">
@@ -123,6 +153,9 @@ function CreateRestaurant() {
                         className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset  placeholder:text-gray-400  focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         onChange={(e) => setAddress(e.target.value)}
                       />
+                      {errors.address && (
+                        <p className="text-red-500 text-xs mt-1">{errors.address}</p>
+                      )}
                     </div>
                   </div>
                 </div>

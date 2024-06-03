@@ -9,7 +9,7 @@ function Restaurant() {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:3000/restaurantss/${id}`)
+      .delete(`http://localhost:3000/restaurants/${id}`)
       .then((res) => {
         console.log(res);
         alert("Deleted Successfully.");
@@ -85,8 +85,9 @@ function Restaurant() {
                         {/* <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 text-left text-blueGray-700">{restaurant._id}</td> */}
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 ">{restaurant.name}</td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 ">{restaurant.address}</td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 ">{restaurant.contact}</td>
+                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 "><span>+94{" "}</span>{restaurant.contact}</td>
                         <td className="flex text-center border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 gap-2">
+                        <Link to={`/show/${restaurant._id}`} className="bg-stone-500 hover:bg-stone-700  text-white text-xs  uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Details</Link>
                         <Link to={`/edit/${restaurant._id}`} className="bg-blue-500 hover:bg-blue-700  text-white text-xs  uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Edit</Link>
                         <button onClick={() => handleDelete(restaurant._id)} className="bg-red-500 hover:bg-red-700 text-white  text-xs  uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Delete</button>
                       </td>
