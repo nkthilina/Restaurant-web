@@ -46,7 +46,7 @@ function RestaurantDetails() {
                   </p>
                   <p className="font-normal text-gray-700">
                   Contact Number :{" "}
-                    <span className="text-stone-400 ">{restaurant.contact}</span>
+                    <span className="text-stone-400 ">+94{" "}{restaurant.contact}</span>
                   </p>
                 </div>
 

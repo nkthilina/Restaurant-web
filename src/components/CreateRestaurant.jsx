@@ -21,7 +21,7 @@ function CreateRestaurant() {
     }
     const contactPattern = /^[0-9]{10}$/;
     if (!contact) {
-      newErrors.contact = "Contact is required.";
+      newErrors.contact = "Contact Number is required.";
     } else if (!contactPattern.test(contact)) {
       newErrors.contact = "Contact number must contain 10 digits.";
     }
@@ -130,12 +130,6 @@ function CreateRestaurant() {
                       )}
                     </div>
                   </div>
-                  {/* <div className="sm:col-span-2">
-              <label htmlFor="company" className="block text-sm font-semibold leading-6 text-black">Company</label>
-              <div className="mt-2.5">
-                <input type="text" name="company" id="company" autoComplete="organization" className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400  focus:ring-inset focus:ring-blue-400 sm:text-sm sm:leading-6" />
-              </div>
-            </div> */}
                   <div className="sm:col-span-2">
                     <label
                       htmlFor="address"
