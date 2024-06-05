@@ -5,6 +5,14 @@ import Footer from "./Footer";
 
 function Restaurant() {
   const [restaurants, setRestaurants] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(5);
+  const startIndex = (currentPage - 1) * recordsPerPage;
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = restaurants.slice(firstIndex, lastIndex);
+  const npage = Math.ceil(restaurants.length / recordsPerPage);
+  const numbers = [...Array(npage + 1).keys()].slice(1);
 
   const handleDelete = (id) => {
     axios
@@ -16,6 +24,25 @@ function Restaurant() {
       })
       .catch((err) => console.log(err));
   };
+
+  const previousPage = () => {
+    if (currentPage !== 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  const nextPage = () => {
+    if (currentPage !== npage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const changeCurrentPage = (id) => {
+    setCurrentPage(id);
+  };
+
+  // const refreshPage = () => {
+  //   window.location.reload();
+  // };
 
   useEffect(() => {
     axios
@@ -57,45 +84,118 @@ function Restaurant() {
               </div>
             </div>
             <div className="block w-full overflow-x-auto">
-              <table className="items-center bg-transparent w-full border-collapse ">
-                <thead>
-                  <tr>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      ID
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      Name
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      Address
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      Telephone
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {restaurants.map((restaurant, index) => {
-                    return (
-                      <tr key={index}>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 text-left text-blueGray-700">{index + 1}</td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 ">{restaurant.name}</td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 ">{restaurant.address}</td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 "><span>+94{" "}</span>{restaurant.contact}</td>
-                        <td className="flex text-center border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 gap-2">
-                        <Link to={`/show/${restaurant._id}`} className="bg-stone-500 hover:bg-stone-700  text-white text-xs  uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Details</Link>
-                        <Link to={`/edit/${restaurant._id}`} className="bg-blue-500 hover:bg-blue-700  text-white text-xs  uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Edit</Link>
-                        <button onClick={() => handleDelete(restaurant._id)} className="bg-red-500 hover:bg-red-700 text-white  text-xs  uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Delete</button>
-                      </td>
-                      </tr>
-                    );
-                  })
-                  }
-                </tbody>
-              </table>
+              {restaurants.length > 0 ? (
+                <div>
+                  <div>
+                    <table className="items-center bg-transparent w-full border-collapse ">
+                      <thead>
+                        <tr>
+                          <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            ID
+                          </th>
+                          <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            Name
+                          </th>
+                          <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            Address
+                          </th>
+                          <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            Telephone
+                          </th>
+                          <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {records.map((restaurant, index) => {
+                          return (
+                            <tr key={index}>
+                              <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 text-left text-blueGray-700">
+                                {startIndex + index + 1}
+                              </td>
+                              <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 ">
+                                {restaurant.name}
+                              </td>
+                              <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 ">
+                                {restaurant.address}
+                              </td>
+                              <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 ">
+                                <span>+94 </span>
+                                {restaurant.contact}
+                              </td>
+                              <td className="flex text-center border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 gap-2">
+                                <Link
+                                  to={`/show/${restaurant._id}`}
+                                  className="bg-stone-500 hover:bg-stone-700  text-white text-xs  uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                >
+                                  Details
+                                </Link>
+                                <Link
+                                  to={`/edit/${restaurant._id}`}
+                                  className="bg-blue-500 hover:bg-blue-700  text-white text-xs  uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                >
+                                  Edit
+                                </Link>
+                                <button
+                                  onClick={() => handleDelete(restaurant._id)}
+                                  className="bg-red-500 hover:bg-red-700 text-white  text-xs  uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                >
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* pagination */}
+                  <div className=" flex items-center justify-center ">
+                    <div className="max-w-full md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl mx-auto bg-white p-6 rounded-lg shadow-sm">
+                      <div className="flex justify-center">
+                        <nav className="flex space-x-2" aria-label="Pagination">
+                          <ul>
+                            <li>
+                              <a
+                                href="#"
+                                onClick={previousPage}
+                                className="relative inline-flex items-center  text-sm  border border-fuchsia-100 hover:border-violet-100 text-white  cursor-pointer leading-5 rounded-md   focus:shadow-outline-blue focus:border-blue-300 focus:z-10 bg-indigo-500 hover:bg-indigo-700 active:bg-indigo-600  font-bold   p-1 my-1  outline-none focus:outline-none  ease-linear transition-all duration-150"
+                              >
+                                Previous
+                              </a>
+                            </li>
+                          </ul>
+                          {numbers.map((number, index) => (
+                            <a
+                              href="#"
+                              className={`relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-fuchsia-100 hover:bg-indigo-200  cursor-pointer leading-5 rounded-md transition duration-150 ease-in-out focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 ${
+                                currentPage === number ? "active " : ""
+                              }`}
+                              key={index}
+                              onClick={() => changeCurrentPage(number)}
+                            >
+                              {number}
+                            </a>
+                          ))}
+                          <a
+                            href="#"
+                            onClick={nextPage}
+                            className="relative inline-flex items-center  text-sm  border border-fuchsia-100 hover:border-violet-100 text-white  cursor-pointer leading-5 rounded-md   focus:shadow-outline-blue focus:border-blue-300 focus:z-10 bg-indigo-500 hover:bg-indigo-700 active:bg-indigo-600  font-bold px-3  py-1 m-1  outline-none focus:outline-none ease-linear transition-all duration-150"
+                          >
+                            Next
+                          </a>
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center text-red-500 py-4">
+                  There is no data available. Create some ....
+                </div>
+              )}
             </div>
           </div>
         </div>
